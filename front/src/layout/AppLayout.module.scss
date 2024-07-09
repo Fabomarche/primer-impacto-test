@@ -1,0 +1,13 @@
+.layout {
+    height: 100vh;
+}
+
+.inner-layout {
+    @extend .layout;
+}
+
+.menu {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
