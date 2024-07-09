@@ -3,7 +3,8 @@
     "error",
     {"endOfLine": "auto"},
     {
-      "usePrettierrc": false
+      "singleQuote": true,
+      "parser": "flow"
     }
   ],
   "singleQuote": true,
