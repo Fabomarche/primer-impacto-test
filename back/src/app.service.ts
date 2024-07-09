@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import AppRepository from './app.repository'
+import AppRepository, { VideoGame } from './app.repository'
 
 @Injectable()
 export class AppService {
@@ -10,4 +10,7 @@ export class AppService {
     }
 
     // Define methods to interact with the repository
+    getAllVideoGames(): VideoGame[] {
+        return this.repo.getAllVideoGames()
+    }
 }

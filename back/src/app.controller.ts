@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common'
 import { AppService } from './app.service'
+import { VideoGame } from './app.repository'
 
 @Controller()
 export class AppController {
@@ -11,6 +12,10 @@ export class AppController {
     }
 
     // Endpoint to get video games
+    @Get('video-games')
+    getAllVideoGames(): VideoGame[] {
+        return this.appService.getAllVideoGames()
+    }
 
     // Endpoint to delete a video game
 
