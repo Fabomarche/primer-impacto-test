@@ -1,31 +1,31 @@
 import { useState, useEffect } from 'react';
-import { fetchVideoGames, VideoGame  } from '../services/videoFameService'
+import { fetchVideoGames, VideoGame  } from '../services/videoGameService'
 
-interface VideoGameRsponse {
+interface VideoGameResponse {
     data: VideoGame[];
 }
 
 export const useVideoGames = () => {
     const [videoGames, setVideoGames] = useState<VideoGame[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<Error | null>(null);
+    const [isLoadingGames, setIsLoadingGames] = useState(true);
+    const [errorGames, setErrorGames] = useState<Error | null>(null);
+
+    const loadVideoGames = async () => {
+        setIsLoadingGames(true);
+        try {
+            const games = await fetchVideoGames() as unknown as VideoGameResponse;
+            setVideoGames(games.data);
+            setIsLoadingGames(false);
+        } catch (error) {
+            console.error(error);
+            setErrorGames(error as Error);
+            setIsLoadingGames(false);
+        }
+    };
 
     useEffect(() => {
-        const getVideoGames = async () => {
-            try {
-                const games = await fetchVideoGames() as unknown as VideoGameRsponse;
-                setVideoGames(games.data);
-
-                setIsLoading(false);
-            } catch (error) {
-                console.error(error);
-                setError(error as Error);
-                setIsLoading(false);
-            }
-        };
-
-        getVideoGames();
+        loadVideoGames();
     }, []);
 
-    return { videoGames, isLoading, error };
+    return { videoGames, isLoadingGames, errorGames, reloadGames: loadVideoGames };
 };

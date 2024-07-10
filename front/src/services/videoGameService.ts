@@ -1,7 +1,7 @@
 const backendUrl: string = import.meta.env.VITE_BACKEND_URL as string;
 
 export interface VideoGame {
-    id: string;
+    _id: string;
     name: string;
     genre: string;
     releaseDate: Date;
@@ -19,7 +19,7 @@ export const fetchVideoGames = async (): Promise<VideoGame[]> => {
     return data
 }
 
-export const deleteVideoGame = async (id: string): Promise<any> => {
+export const deleteVideoGame = async (id: string): Promise<unknown> => {
     const response = await fetch(`${backendUrl}/video-games/${id}`, {
         method: 'DELETE',
     });
