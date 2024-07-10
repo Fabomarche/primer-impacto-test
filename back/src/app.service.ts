@@ -19,28 +19,27 @@ export class AppService {
     async getAllVideoGames(): Promise<VideoGame[]> {
         return this.videoGameModel.find().exec()
     }
-    /*
-    deleteVideoGame(id: number): VideoGame {
-        const videoGame = this.repo.getVideoGameById(id)
+
+    async deleteVideoGame(id: string): Promise<VideoGame> {
+        const videoGame = await this.videoGameModel.findById(id)
         if (!videoGame) {
             throw new Error('Video game not found')
         }
-        this.repo.deleteVideoGame(id)
+        await videoGame.deleteOne()
         return videoGame
-    } */
+    }
 
     async addVideoGame(createVideoGameDto: CreateVideoGameDto): Promise<VideoGame> {
         const createdVideoGame = new this.videoGameModel(createVideoGameDto)
         return createdVideoGame.save()
     }
 
-    /* updateVideoGame(updatedVideoGame: VideoGame) {
-        const id = updatedVideoGame.id
-        const videoGame = this.repo.getVideoGameById(id)
+    async updateVideoGame(id: string, updatedVideoGame: CreateVideoGameDto): Promise<VideoGame> {
+        const videoGame = await this.videoGameModel.findById(id)
         if (!videoGame) {
             throw new Error('Video game not found')
         }
-        this.repo.updateVideoGame(updatedVideoGame)
-        return updatedVideoGame
-    } */
+        Object.assign(videoGame, updatedVideoGame)
+        return videoGame.save()
+    }
 }

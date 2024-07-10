@@ -1,13 +1,13 @@
 import {
     Controller,
-    //  Delete,
+    Delete,
     Get,
-    //Param,
+    Param,
     Post,
     Body,
     HttpException,
     HttpStatus,
-    //  Put,
+    Put,
 } from '@nestjs/common'
 import { AppService } from './app.service'
 import { CreateVideoGameDto } from './dto/create-video-game.dto'
@@ -37,14 +37,10 @@ export class AppController {
     }
 
     // Endpoint to delete a video
-    /*  @Delete('video-games/:id')
-    deleteVideoGame(@Param('id') id: string): any {
+    @Delete('video-games/:id')
+    async deleteVideoGame(@Param('id') id: string): Promise<any> {
         try {
-            const idNumber = Number(id)
-            if (isNaN(idNumber)) {
-                throw new HttpException('Invalid ID', HttpStatus.BAD_REQUEST)
-            }
-            const deletedVideoGame = this.appService.deleteVideoGame(idNumber)
+            const deletedVideoGame = await this.appService.deleteVideoGame(id)
             return {
                 success: true,
                 message: 'Video game deleted successfully',
@@ -53,7 +49,7 @@ export class AppController {
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
-    } */
+    }
 
     // Endpoint to add a video game
     @Post('video-games')
@@ -72,17 +68,23 @@ export class AppController {
     }
 
     // Endpoint to update a video game
-    /*  @Put('video-games/:id')
-    updateVideoGame(@Body() upadatedVideoGame: VideoGame): any {
+    @Put('video-games/:id')
+    async updateVideoGame(
+        @Param('id') id: string,
+        @Body() updatedVideoGame: CreateVideoGameDto,
+    ): Promise<any> {
         try {
-            const updatedVideoGame = this.appService.updateVideoGame(upadatedVideoGame)
+            const updatedVideoGameResult = await this.appService.updateVideoGame(
+                id,
+                updatedVideoGame,
+            )
             return {
                 success: true,
                 message: 'Video game updated successfully',
-                data: updatedVideoGame,
+                data: updatedVideoGameResult,
             }
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
-    } */
+    }
 }
