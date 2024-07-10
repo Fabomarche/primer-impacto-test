@@ -1,16 +1,16 @@
 import {
     Controller,
-    Delete,
+    //  Delete,
     Get,
-    Param,
+    //Param,
     Post,
     Body,
     HttpException,
     HttpStatus,
-    Put,
+    //  Put,
 } from '@nestjs/common'
 import { AppService } from './app.service'
-import { VideoGame } from './app.repository'
+import { CreateVideoGameDto } from './dto/create-video-game.dto'
 
 @Controller()
 export class AppController {
@@ -23,9 +23,9 @@ export class AppController {
 
     // Endpoint to get video games
     @Get('video-games')
-    getAllVideoGames(): any {
+    async getAllVideoGames(): Promise<any> {
         try {
-            const videoGames = this.appService.getAllVideoGames()
+            const videoGames = await this.appService.getAllVideoGames()
             return {
                 success: true,
                 message: 'Video games retrieved successfully',
@@ -37,7 +37,7 @@ export class AppController {
     }
 
     // Endpoint to delete a video
-    @Delete('video-games/:id')
+    /*  @Delete('video-games/:id')
     deleteVideoGame(@Param('id') id: string): any {
         try {
             const idNumber = Number(id)
@@ -53,21 +53,14 @@ export class AppController {
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
-    }
+    } */
 
     // Endpoint to add a video game
     @Post('video-games')
-    addVideoGame(@Body() videoGame: VideoGame): any {
+    async addVideoGame(@Body() createVideoGameDto: CreateVideoGameDto): Promise<any> {
         try {
-            if (
-                !videoGame.name ||
-                !videoGame.genre ||
-                !videoGame.releaseDate ||
-                !videoGame.metacriticScore
-            ) {
-                throw new HttpException('Missing data', HttpStatus.BAD_REQUEST)
-            }
-            const newVideoGame = this.appService.addVideoGame(videoGame)
+            const newVideoGame = await this.appService.addVideoGame(createVideoGameDto)
+            console.log(newVideoGame)
             return {
                 success: true,
                 message: 'Video game added successfully',
@@ -79,7 +72,7 @@ export class AppController {
     }
 
     // Endpoint to update a video game
-    @Put('video-games/:id')
+    /*  @Put('video-games/:id')
     updateVideoGame(@Body() upadatedVideoGame: VideoGame): any {
         try {
             const updatedVideoGame = this.appService.updateVideoGame(upadatedVideoGame)
@@ -91,5 +84,5 @@ export class AppController {
         } catch (error) {
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
-    }
+    } */
 }

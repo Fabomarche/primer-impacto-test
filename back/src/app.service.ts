@@ -1,23 +1,25 @@
+import { Model, Connection } from 'mongoose'
 import { Injectable } from '@nestjs/common'
-import AppRepository, { VideoGame } from './app.repository'
+import { InjectModel, InjectConnection } from '@nestjs/mongoose'
+import { VideoGame } from './schemas/game.schema'
+import { CreateVideoGameDto } from './dto/create-video-game.dto'
 
 @Injectable()
 export class AppService {
-    constructor(private readonly repo: AppRepository) {}
+    constructor(
+        @InjectModel(VideoGame.name) private videoGameModel: Model<VideoGame>,
+        @InjectConnection() private connection: Connection,
+    ) {}
 
     getHello(): string {
         return 'Hello World!'
     }
 
     // Define methods to interact with the repository
-    getAllVideoGames(): VideoGame[] {
-        const videoGames = this.repo.getAllVideoGames()
-        if (!videoGames) {
-            throw new Error('No video games found')
-        }
-        return videoGames
+    async getAllVideoGames(): Promise<VideoGame[]> {
+        return this.videoGameModel.find().exec()
     }
-
+    /*
     deleteVideoGame(id: number): VideoGame {
         const videoGame = this.repo.getVideoGameById(id)
         if (!videoGame) {
@@ -25,15 +27,14 @@ export class AppService {
         }
         this.repo.deleteVideoGame(id)
         return videoGame
+    } */
+
+    async addVideoGame(createVideoGameDto: CreateVideoGameDto): Promise<VideoGame> {
+        const createdVideoGame = new this.videoGameModel(createVideoGameDto)
+        return createdVideoGame.save()
     }
 
-    addVideoGame(videoGame: VideoGame): VideoGame {
-        videoGame.releaseDate = new Date(videoGame.releaseDate)
-        this.repo.addVideoGame(videoGame)
-        return videoGame
-    }
-
-    updateVideoGame(updatedVideoGame: VideoGame) {
+    /* updateVideoGame(updatedVideoGame: VideoGame) {
         const id = updatedVideoGame.id
         const videoGame = this.repo.getVideoGameById(id)
         if (!videoGame) {
@@ -41,5 +42,5 @@ export class AppService {
         }
         this.repo.updateVideoGame(updatedVideoGame)
         return updatedVideoGame
-    }
+    } */
 }
