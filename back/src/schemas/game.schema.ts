@@ -5,7 +5,7 @@ export type VideoGameDocument = HydratedDocument<VideoGame>
 
 @Schema()
 export class VideoGame {
-    @Prop({ required: true })
+    @Prop({ required: true, unique: true })
     name: string
 
     @Prop()
