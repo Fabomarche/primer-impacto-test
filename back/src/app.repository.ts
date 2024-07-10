@@ -8,6 +8,7 @@ export interface VideoGame {
 
 class AppRepository {
     private videoGames: VideoGame[]
+    private currentId: number
 
     constructor() {
         this.videoGames = [
@@ -54,6 +55,8 @@ class AppRepository {
                 metacriticScore: 93,
             },
         ]
+        this.currentId =
+            this.videoGames.length > 0 ? Math.max(...this.videoGames.map((game) => game.id)) + 1 : 1
     }
 
     public getAllVideoGames(): VideoGame[] {
@@ -65,6 +68,7 @@ class AppRepository {
     }
 
     public addVideoGame(videoGame: VideoGame): void {
+        videoGame.id = this.currentId++
         this.videoGames.push(videoGame)
     }
 
