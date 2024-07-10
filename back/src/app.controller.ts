@@ -7,6 +7,7 @@ import {
     Body,
     HttpException,
     HttpStatus,
+    Put,
 } from '@nestjs/common'
 import { AppService } from './app.service'
 import { VideoGame } from './app.repository'
@@ -78,4 +79,17 @@ export class AppController {
     }
 
     // Endpoint to update a video game
+    @Put('video-games/:id')
+    updateVideoGame(@Body() upadatedVideoGame: VideoGame): any {
+        try {
+            const updatedVideoGame = this.appService.updateVideoGame(upadatedVideoGame)
+            return {
+                success: true,
+                message: 'Video game updated successfully',
+                data: updatedVideoGame,
+            }
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
 }

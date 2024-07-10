@@ -32,4 +32,14 @@ export class AppService {
         this.repo.addVideoGame(videoGame)
         return videoGame
     }
+
+    updateVideoGame(updatedVideoGame: VideoGame) {
+        const id = updatedVideoGame.id
+        const videoGame = this.repo.getVideoGameById(id)
+        if (!videoGame) {
+            throw new Error('Video game not found')
+        }
+        this.repo.updateVideoGame(updatedVideoGame)
+        return updatedVideoGame
+    }
 }
