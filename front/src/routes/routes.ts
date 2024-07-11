@@ -12,6 +12,11 @@ const routes: Route[] = [
         loader: () => import('../Screens/AddGameScreen'),
         exact: true,
     },
+    {
+        path: RoutesDefinition.UPDATE,
+        loader: () => import('../Screens/UpdateGameScreen'),
+        exact: true,
+    },
 ];
 
 export default routes;

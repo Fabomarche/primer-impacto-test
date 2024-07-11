@@ -1,4 +1,5 @@
 export enum RoutesDefinition {
     HOME = '/',
-    ADD = '/add-game'
+    ADD = '/add-game',
+    UPDATE = '/update-game/:id'
 }
