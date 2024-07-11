@@ -14,7 +14,7 @@ type ErrorType = {
 
 const GameForm = ({ onSubmit, initialValues, isLoading, error }: { 
     onSubmit: (values: VideoGame) => Promise<void>, 
-    initialValues: VideoGame, 
+    initialValues: VideoGame | null, 
     isLoading: boolean, 
     error: ErrorType | null }) => {
 

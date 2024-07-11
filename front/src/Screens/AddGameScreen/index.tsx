@@ -1,25 +1,16 @@
-import { useAddVideoGame } from '../../hooks/useAddVideoGame'
+import { useAddVideoGame } from '../../services/videoGameService';
 import GameForm from '../../components/GameForm'
 
 const AddGameScreen = () => {
-    const { handleAdd, isLoading, addError } = useAddVideoGame()
-    const defaultGame = {
-        _id: '',
-        name: '',
-        genre: '',
-        releaseDate: null,
-        metacriticScore: null,
-    };
-
-
+    const {mutateAsync: handleAdd, isLoading, error: addError } = useAddVideoGame()
 
     return (
         <>
             <GameForm 
                 onSubmit={handleAdd}
-                initialValues={defaultGame}
+                initialValues={null}
                 isLoading={isLoading}
-                error={addError}
+                error={addError as Error | null}
             />  
         </>
     )
