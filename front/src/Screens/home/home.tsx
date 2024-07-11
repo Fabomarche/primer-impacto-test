@@ -2,27 +2,23 @@ import { useState } from 'react';
 import CustomTable from '../../components/CustomTable';
 import Loading from '../../components/Loading';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { useVideoGames } from '../../hooks/useVideoGames';
-import { useDeleteVideoGame } from '../../hooks/useDeleteVideoGame';
-import { useUpdateVideoGame } from '../../hooks/useUpdateVideoGame';
-import { VideoGame } from '../../services/videoGameService';
+import { useFetchVideoGames, useDeleteVideoGame, useUpdateVideoGame, VideoGame } from '../../services/videoGameService';
 import { CustomNotification } from '../../components/CustomNotification';
 import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
     const navigate = useNavigate()
-    const { videoGames, isLoadingGames, errorGames, reloadGames } = useVideoGames();
+    const { data: videoGames, isLoading: isLoadingGames, error: errorGames } = useFetchVideoGames();
     const [loadingUpdateStates, setLoadingUpdateStates] = useState<Record<string, boolean>>({});
     const [loadingDeleteStates, setLoadingDeleteStates] = useState<Record<string, boolean>>({});
-    const { handleDelete,  errorDelete } = useDeleteVideoGame();
-    const { handleUpdate, updateError } = useUpdateVideoGame()
+    const { mutateAsync: handleDelete, error: errorDelete } = useDeleteVideoGame();
+    const { mutateAsync: handleUpdate, error: errorUpdate } = useUpdateVideoGame();
 
     const onClickDelete = async (id: string) => {
         setLoadingDeleteStates(prev => ({ ...prev, [id]: true }));
         await handleDelete(id);
         setLoadingDeleteStates(prev => ({ ...prev, [id]: false }));
-        reloadGames()
         CustomNotification({
             type: 'success',
             description: 'Video Game deleted successfully',
@@ -95,9 +91,9 @@ const Home = () => {
         
     ]
     
-    const errors = [errorGames, errorDelete, updateError];
+    const errors: (unknown)[] = [errorGames, errorDelete, errorUpdate];
     for (const error of errors) {
-        if (error) {
+        if (error instanceof Error) {
             CustomNotification({ 
                 type:'error', 
                 message:'Error', 
@@ -115,8 +111,7 @@ const Home = () => {
                 : 
                 <CustomTable
                     columns={columns}
-                    dataSource={videoGames}
-  
+                    dataSource={videoGames?.data}
                 />
             }
         </div>
