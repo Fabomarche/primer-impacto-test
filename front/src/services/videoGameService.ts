@@ -43,8 +43,8 @@ export const addVideoGame = async (videoGame: VideoGame): Promise<VideoGame> => 
     return response.json();
 }
 
-export const updateVideoGame = async (id: string, updatedVideoGame: VideoGame): Promise<VideoGame> => {
-    const response = await fetch(`${backendUrl}/video-games/${id}`, {
+export const updateVideoGame = async (updatedVideoGame: VideoGame): Promise<VideoGame> => {
+    const response = await fetch(`${backendUrl}/video-games/${updatedVideoGame._id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
