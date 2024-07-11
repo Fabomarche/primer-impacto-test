@@ -1,4 +1,4 @@
-import { HomeOutlined } from '@ant-design/icons';
+import { HomeOutlined, FileAddOutlined } from '@ant-design/icons';
 import { Col, Layout, Menu, Row, message } from 'antd';
 import Sider from 'antd/es/layout/Sider';
 import { Content } from 'antd/es/layout/layout';
@@ -23,6 +23,9 @@ const AppLayout = ({ children }: Props) => {
                     <Menu mode="vertical" className={styles.menu}>
                         <Menu.Item key="/" icon={<HomeOutlined />}>
                             <Link to={RoutesDefinition.HOME}>Inicio</Link>
+                        </Menu.Item>
+                        <Menu.Item key="/add-game" icon={<FileAddOutlined />}>
+                            <Link to={RoutesDefinition.ADD}>Add new game</Link>
                         </Menu.Item>
                     </Menu>
                 </Sider>
