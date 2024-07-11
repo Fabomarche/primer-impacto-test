@@ -4,8 +4,8 @@ export interface VideoGame {
     _id: string;
     name: string;
     genre: string;
-    releaseDate: Date;
-    metacriticScore: number;
+    releaseDate: Date | null;
+    metacriticScore: number | null;
 }
 
 export const fetchVideoGames = async (): Promise<VideoGame[]> => {
