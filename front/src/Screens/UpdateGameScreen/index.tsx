@@ -1,4 +1,5 @@
 import { useContext, useEffect } from 'react';
+import { Row } from 'antd';
 import { VideoGameContext } from '../../context/context';
 import { useUpdateVideoGame } from '../../services/videoGameService' 
 import Loading from '../../components/Loading'
@@ -37,12 +38,14 @@ const UpdateGameScreen = () => {
 
     
     return (
-        <GameForm
-            onSubmit={handleUpdate}
-            initialValues={updatedVideoGame}
-            isLoading={isLoading}
-            error={updateError as Error | null}
-        />
+        <Row justify='center'>
+            <GameForm
+                onSubmit={handleUpdate}
+                initialValues={updatedVideoGame}
+                isLoading={isLoading}
+                error={updateError as Error | null}
+            />
+        </Row>
     )
 }
 
