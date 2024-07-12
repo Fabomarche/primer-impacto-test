@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useContext  } from 'react';
 import CustomTable from '../../components/CustomTable';
 import Loading from '../../components/Loading';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { useFetchVideoGames, useDeleteVideoGame, useUpdateVideoGame, VideoGame } from '../../services/videoGameService';
+import { useFetchVideoGames, useDeleteVideoGame, VideoGame } from '../../services/videoGameService';
+import { VideoGameContext } from '../../context/context';
 import { CustomNotification } from '../../components/CustomNotification';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +14,7 @@ const Home = () => {
     const [loadingUpdateStates, setLoadingUpdateStates] = useState<Record<string, boolean>>({});
     const [loadingDeleteStates, setLoadingDeleteStates] = useState<Record<string, boolean>>({});
     const { mutateAsync: handleDelete, error: errorDelete } = useDeleteVideoGame();
-    const { mutateAsync: handleUpdate, error: errorUpdate } = useUpdateVideoGame();
+    const { setUpdatedVideoGame } = useContext(VideoGameContext)
 
     const onClickDelete = async (id: string) => {
         setLoadingDeleteStates(prev => ({ ...prev, [id]: true }));
@@ -28,11 +29,15 @@ const Home = () => {
 
     const onClickUpdate =  async (updatedVideoGame: VideoGame) => {
         setLoadingUpdateStates(prev => ({ ...prev, [updatedVideoGame._id]: true }));
-        await handleUpdate(updatedVideoGame);
+        setUpdatedVideoGame(updatedVideoGame)
         setLoadingUpdateStates(prev => ({ ...prev, [updatedVideoGame._id]: false }));
         navigate(`/update-game/${updatedVideoGame._id}`)  
     }
 
+    const genres = Array.from(new Set(videoGames?.data.map(game => game.genre || 'undefined')))
+        .map(genre => genre || 'undefined');
+
+    console.log(genres)
 
     const columns = [
         {
@@ -44,17 +49,29 @@ const Home = () => {
             title: 'Genre',
             dataIndex: 'genre',
             key: 'genre',
+            filters: genres?.map(genre => ({ text: genre, value: genre })),
+            onFilter: (value: string, record: VideoGame) => record.genre ? record.genre.indexOf(value) === 0 : false,
         },
         {
             title: 'Release Date',
             dataIndex: 'releaseDate',
             key: 'releaseDate',
+            render: (date: Date, record: unknown) => {
+                const videoGame = record as VideoGame;
+                if (videoGame.releaseDate) {
+                    return new Date(videoGame.releaseDate).toISOString().split('T')[0];
+                }
+                return null;
+            }
         },
         {
             title: 'Metacritic Score',
             dataIndex: 'metacriticScore',
             key: 'metacriticScore',
-        },
+            sorter: (a: VideoGame, b: VideoGame) => (a.metacriticScore || 0) - (b.metacriticScore || 0),
+            sortDirections: ['descend', 'ascend'],
+        }
+        ,
         {
             title: 'Update',
             key: 'update',
@@ -91,7 +108,7 @@ const Home = () => {
         
     ]
     
-    const errors: (unknown)[] = [errorGames, errorDelete, errorUpdate];
+    const errors: (unknown)[] = [errorGames, errorDelete];
     for (const error of errors) {
         if (error instanceof Error) {
             CustomNotification({ 
