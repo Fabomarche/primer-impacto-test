@@ -46,7 +46,7 @@ const GameForm = ({ onSubmit, initialValues, isLoading, error }: {
         if (initialValues){
             values._id = initialValues._id
         } 
-        if (values.metacriticScore === ''){
+        if (!values.metacriticScore){
             values.metacriticScore = 0
         }
         onSubmit(values)
@@ -110,7 +110,6 @@ const GameForm = ({ onSubmit, initialValues, isLoading, error }: {
                     >
                         <Input 
                             type='number' 
-                            defaultValue={0}
                         />
                     </Form.Item>
                 </div>

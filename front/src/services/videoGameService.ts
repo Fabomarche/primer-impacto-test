@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient  } from 'react-query';
 
 const backendUrl: string = import.meta.env.VITE_BACKEND_URL as string;
 
@@ -24,6 +24,8 @@ export const useFetchVideoGames = () => {
 };
 
 export const useDeleteVideoGame = () => {
+    const queryClient = useQueryClient();
+
     return useMutation(async (id: string) => {
         const response = await fetch(`${backendUrl}/video-games/${id}`, {
             method: 'DELETE',
@@ -31,6 +33,9 @@ export const useDeleteVideoGame = () => {
         if (!response.ok) {
             throw new Error(`Failed to delete video game with id ${id}. Status: ${response.status}`);
         }
+
+        queryClient.invalidateQueries('videoGames');
+        
         return response.json();
     });
 };
@@ -52,6 +57,8 @@ export const useAddVideoGame = () => {
 };
 
 export const useUpdateVideoGame = () => {
+    const queryClient = useQueryClient();
+    
     return useMutation(async (updatedVideoGame: VideoGame) => {
         const response = await fetch(`${backendUrl}/video-games/${updatedVideoGame._id}`, {
             method: 'PUT',
@@ -63,6 +70,9 @@ export const useUpdateVideoGame = () => {
         if (!response.ok) {
             throw new Error(`Failed to update video game with id ${updatedVideoGame._id}. Status: ${response.status}`);
         }
+
+        queryClient.invalidateQueries('videoGames');
+
         return response.json();
     });
 };
