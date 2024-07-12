@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Button, Form, Input } from 'antd'
 import { CustomNotification } from '../CustomNotification'
 import { VideoGame } from '../../services/videoGameService'
+import { useNavigate } from 'react-router-dom';
 
 
 import './style.scss'
@@ -20,24 +21,42 @@ const GameForm = ({ onSubmit, initialValues, isLoading, error }: {
 
     const [form] = Form.useForm();
     const [gameName, setGameName] = useState('')
+    const navigate = useNavigate()
 
     useEffect(() => {
+   
         if (initialValues) {
-            form.setFieldsValue(initialValues);
+            if (initialValues.releaseDate){
+                const date = new Date(initialValues.releaseDate);
+                const dateString = date.toISOString().split('T')[0];
+                const valuesWithFormattedDate = { ...initialValues, releaseDate: dateString };
+                form.setFieldsValue(valuesWithFormattedDate);
+            }
+            form.setFieldsValue(initialValues)
             setGameName(initialValues.name);
         }
     }, [initialValues]);
-
+    
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setGameName(e.target.value)
     }
 
-    const handleOnFinish = () => {
+    const handleOnFinish =  () => {
         const values = form.getFieldsValue()
+        if (initialValues){
+            values._id = initialValues._id
+        } 
+        if (values.metacriticScore === ''){
+            values.metacriticScore = 0
+        }
         onSubmit(values)
         CustomNotification({type: 'success', message: 'Success', description:'Video Game saved successfully'})
-        setGameName('')
-        form.resetFields()
+        if (!initialValues){
+            setGameName('')
+            form.resetFields()
+        } else {
+            navigate('/') 
+        }
     }
 
     if (error) {
@@ -91,6 +110,7 @@ const GameForm = ({ onSubmit, initialValues, isLoading, error }: {
                     >
                         <Input 
                             type='number' 
+                            defaultValue={0}
                         />
                     </Form.Item>
                 </div>
