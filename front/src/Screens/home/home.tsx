@@ -1,5 +1,7 @@
 import { useState, useContext  } from 'react';
 import CustomTable from '../../components/CustomTable';
+import { Input, Button, Space } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import Loading from '../../components/Loading';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useFetchVideoGames, useDeleteVideoGame, VideoGame } from '../../services/videoGameService';
@@ -37,13 +39,51 @@ const Home = () => {
     const genres = Array.from(new Set(videoGames?.data.map(game => game.genre || 'undefined')))
         .map(genre => genre || 'undefined');
 
-    console.log(genres)
+
+    
+    const handleSearch = (confirm: () => void) => {
+        confirm();
+    };
+
+    const handleReset =  (clearFilters: () => void, setSelectedKeys: (keys: string[]) => void, confirm: () => void) => {
+        clearFilters();
+        setSelectedKeys([])
+        confirm()
+    };
 
     const columns = [
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
+            filterIcon: () => (
+                <SearchOutlined />
+            ),
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }: { setSelectedKeys: (keys: string[]) => void, selectedKeys: string[], confirm: () => void, clearFilters: () => void }) => (
+                <div style={{ padding: 8 }}>
+                    <Input
+                        placeholder={'Search name'}
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                        onPressEnter={() => handleSearch(selectedKeys, confirm)}
+                        style={{ width: 188, marginBottom: 8, display: 'block' }}
+                    />
+                    <Space>
+                        <Button
+                            type="primary"
+                            onClick={() => handleSearch(confirm)}
+                            size="small"
+                            style={{ width: 90 }}
+                        >
+                            Search
+                        </Button>
+                        <Button onClick={() => handleReset(clearFilters, setSelectedKeys, confirm)} size="small" style={{ width: 90 }}>
+                            Reset
+                        </Button>
+                    </Space>
+                </div>
+            ),
+            onFilter: (value: string, record: VideoGame) => record.name.toLowerCase().includes(value.toLowerCase())
         },
         {
             title: 'Genre',
