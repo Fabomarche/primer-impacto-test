@@ -18,7 +18,7 @@ export const useFetchVideoGames = () => {
         if (!response.ok) {
             throw new Error(`Failed to fetch video games. Status: ${response.status}`);
         }
-        const data: VideoGame[] = await response.json();
+        const data : { data: VideoGame[] } = await response.json();
         return data;
     });
 };
