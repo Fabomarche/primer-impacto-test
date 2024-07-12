@@ -1,16 +1,48 @@
-.add-game-screen-container{
+.add-game-screen-container {
     padding: 0 10px;
     display: flex;
     flex-direction: column;
-    .add-game-form{
-        gap: 5px;
-        .form-inner-container{
+    max-width: 720px; 
+
+    h1 {
+        font-size: 2rem; 
+        margin-bottom: 20px;
+    }
+
+    .add-game-form {
+        width: 100%; 
+        gap: 15px; 
+
+        .form-inner-container {
             flex-direction: row;
             display: flex;
+            justify-content: space-between; 
+
+            .ant-form-item-control-input-content{
+                padding-right: 5px;
+            }
+
+            @media (max-width: 768px) { 
+                flex-direction: column; 
+            }
+        }
+
+        .button-container {
+            padding-top: 2%;
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+
+            button {
+                min-width: 150px;
+                font-weight: bold; 
+
+                &:disabled { 
+                    background-color: #ccc; 
+                    color: #666;
+                    cursor: not-allowed;
+                }
+            }
         }
     }
- .button-container{
-
-    padding-top: 2%;
- }
 }

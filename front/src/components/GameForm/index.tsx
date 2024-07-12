@@ -73,7 +73,6 @@ const GameForm = ({ onSubmit, initialValues, isLoading, error }: {
             <h1>{initialValues ? 'Edit Video Game' : 'Add a new Video Game'}</h1>
             <Form 
                 form={form} 
-                layout="inline" 
                 className='add-game-form'
                 onFinish={handleOnFinish}
             >
