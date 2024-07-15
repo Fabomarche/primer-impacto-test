@@ -1,45 +1,38 @@
-import { Model, Connection } from 'mongoose'
 import { Injectable } from '@nestjs/common'
-import { InjectModel, InjectConnection } from '@nestjs/mongoose'
-import { VideoGame } from './schemas/game.schema'
+import AppRepository from './app.repository'
 import { CreateVideoGameDto } from './dto/create-video-game.dto'
+import { VideoGame } from './schemas/game.schema'
 
 @Injectable()
 export class AppService {
-    constructor(
-        @InjectModel(VideoGame.name) private videoGameModel: Model<VideoGame>,
-        @InjectConnection() private connection: Connection,
-    ) {}
+    constructor(private readonly appRepository: AppRepository) {}
 
     getHello(): string {
         return 'Hello World!'
     }
 
-    // Define methods to interact with the repository
     async getAllVideoGames(): Promise<VideoGame[]> {
-        return this.videoGameModel.find().exec()
+        return this.appRepository.getAllVideoGames()
     }
 
     async deleteVideoGame(id: string): Promise<VideoGame> {
-        const videoGame = await this.videoGameModel.findById(id)
+        const videoGame = await this.appRepository.getVideoGameById(id)
         if (!videoGame) {
             throw new Error('Video game not found')
         }
-        await videoGame.deleteOne()
+        await this.appRepository.deleteVideoGame(id)
         return videoGame
     }
 
     async addVideoGame(createVideoGameDto: CreateVideoGameDto): Promise<VideoGame> {
-        const createdVideoGame = new this.videoGameModel(createVideoGameDto)
-        return createdVideoGame.save()
+        return this.appRepository.addVideoGame(createVideoGameDto)
     }
 
     async updateVideoGame(id: string, updatedVideoGame: CreateVideoGameDto): Promise<VideoGame> {
-        const videoGame = await this.videoGameModel.findById(id)
+        const videoGame = await this.appRepository.getVideoGameById(id)
         if (!videoGame) {
             throw new Error('Video game not found')
         }
-        Object.assign(videoGame, updatedVideoGame)
-        return videoGame.save()
+        return this.appRepository.updateVideoGame(id, updatedVideoGame)
     }
 }
