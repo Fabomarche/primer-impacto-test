@@ -18,4 +18,11 @@ describe('AppController (e2e)', () => {
     it('/ (GET)', () => {
         return request(app.getHttpServer()).get('/').expect(200).expect('Hello World!')
     })
+
+    it('/video-games (GET)', async () => {
+        const response = await request(app.getHttpServer()).get('/video-games')
+        expect(response.status).toBe(200)
+        expect(response.body.success).toBe(true)
+        expect(response.body.data).toBeDefined()
+    })
 })

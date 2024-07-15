@@ -10,6 +10,7 @@ import {
     Put,
 } from '@nestjs/common'
 import { AppService } from './app.service'
+import { VideoGame } from './schemas/game.schema'
 import { CreateVideoGameDto } from './dto/create-video-game.dto'
 
 @Controller()
@@ -23,7 +24,7 @@ export class AppController {
 
     // Endpoint to get video games
     @Get('video-games')
-    async getAllVideoGames(): Promise<any> {
+    async getAllVideoGames(): Promise<{ success: boolean; message: string; data: VideoGame[] }> {
         try {
             const videoGames = await this.appService.getAllVideoGames()
             return {
@@ -56,13 +57,13 @@ export class AppController {
     async addVideoGame(@Body() createVideoGameDto: CreateVideoGameDto): Promise<any> {
         try {
             const newVideoGame = await this.appService.addVideoGame(createVideoGameDto)
-            console.log(newVideoGame)
             return {
                 success: true,
                 message: 'Video game added successfully',
                 data: newVideoGame,
             }
         } catch (error) {
+            console.error(error)
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
