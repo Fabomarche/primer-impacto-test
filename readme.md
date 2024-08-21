@@ -42,3 +42,46 @@
 - El stack está pensado para ejecutarse con Docker
   - Debes hacer un `docker compose up` en la raiz del proyecto
 - Deberás crear un .env en el front basándote en el `example.env`
+
+
+------------------------------------------------------------
+
+Primer Impacto respuestas challenge:
+
+Configuración Inicial:
+Levanté los contenedores Docker. Inicialmente, el frontend no se levantaba correctamente, así que investigué y realicé las modificaciones necesarias en el docker-compose para solucionarlo.
+
+Desarrollo de Funcionalidades Básicas:
+Me enfoqué primero en cumplir con los requisitos básicos del desafío.
+Creé los servicios y controladores necesarios para implementar el CRUD de los videojuegos en el backend utilizando Nest.js.
+Realicé pruebas de los endpoints con Postman para asegurarme de que todas las operaciones funcionaran correctamente.
+
+Integración Frontend-Backend:
+Conecté el backend con el frontend y desarrollé los componentes y pantallas requeridos utilizando las librerías proporcionadas.
+Implementé las funcionalidades básicas de la tabla de videojuegos y el formulario de creación de nuevos videojuegos.
+
+Implementación de React Query:
+Investigué e implementé react-query para manejar el estado y las solicitudes al backend de manera eficiente, asegurando que los datos de la tabla se mantuvieran actualizados en todo momento.
+
+Funcionalidades Extras:
+Añadí funcionalidades adicionales a la tabla utilizando Ant Design, como filtrado, ordenamiento, paginación y búsqueda por texto, para mejorar la experiencia del usuario.
+Realicé el requerimiento extra de test en el backend para los controllers, asegurando que las funcionalidades críticas estén bien cubiertas por pruebas automatizadas.
+
+Siguientes Pasos para Escalabilidad y Mantenibilidad
+
+Investigar e Implementar pruebas unitarias y de integración adicionales. Y terminar las e2e.
+Investigar y desarrollar componentes reutilizables en el frontend.
+Abstraer los handlers (si es posible) de los componentes y priorizar el concepto de que cada componente o archivo tenga una única responsabilidad.
+
+Para integrar una base de datos MySQL, se deben seguir los siguientes pasos:
+
+Instalar los paquetes @nestjs/typeorm, typeorm y mysql2.
+Configurar la importación en el módulo para la base de datos MySQL.
+Crear una entidad con TypeORM para el repositorio.
+Revisar y modificar la lógica de los servicios y controladores según sea necesario.
+Añadir la configuración de la base de datos MySQL al archivo docker-compose.yml.
+consulta SQL:
+SELECT genre, AVG(metacritic_score) AS average_score
+FROM videogames
+GROUP BY genre;
+
